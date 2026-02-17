@@ -53,7 +53,7 @@ See `AGENTS.md` and `CONTRIBUTING.md` for full contribution policy.
 - PR validation workflow with required checks
 - PR review by GitHub Copilot
 - Release-confidence workflow on every push to `main`
-- Weekly security audits (CodeQL, dependency audit, secret scan)
+- Regular security audits (CodeQL, Dependabot, Code Scanning, Secret Scanning)
 - Planned GitHub Pages API docs publication with Dokka
 
 ## Authentication in examples

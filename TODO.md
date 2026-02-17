@@ -5,7 +5,6 @@
 - [x] Create `AGENTS.md` with strict governance policy
 - [x] Add PR workflow with required checks (`build`, `ktlint`, `detekt`, `unit-tests`)
 - [x] Add release-test workflow for `main`
-- [x] Add weekly security audit workflow
 - [x] Add `README.md` with architecture and process summary
 - [x] Add Apache 2.0 `LICENSE`
 - [x] Add human contribution guide (`CONTRIBUTING.md`)

@@ -62,8 +62,9 @@ Release validation must include the same quality gates as local/PR checks, plus 
 Run recurring security audits with:
 
 - CodeQL analysis
-- dependency vulnerability audit
-- secret scan
+- Dependabot
+- Code Scanning
+- Secret Scanning
 
 ## Decision and Review Quality
 
