@@ -4,12 +4,14 @@ Describe what changed and why.
 
 ## Type of change
 
-- [ ] Documentation
-- [ ] Workflow/CI
-- [ ] Bug fix
-- [ ] Feature
-- [ ] Refactor
-- [ ] Breaking change
+<!-- Remove non-applicable items. -->
+
+- Documentation
+- Workflow/CI
+- Bug fix
+- Feature
+- Refactor
+- Breaking change
 
 ## Scope
 
@@ -22,12 +24,10 @@ Describe what changed and why.
 
 List the checks and tests you ran.
 
-```text
-- build:
-- ktlint:
-- detekt:
-- unit-tests:
-```
+- build
+- ktlint
+- detekt
+- unit-tests
 
 ## Risks and impact
 
