@@ -8,8 +8,9 @@ Kotlin Multiplatform library for the JMAP protocol with typed APIs for Core, Mai
 
 ## Current status
 
-This repository is in a docs-first and test-driven bootstrap phase.
-Implementation starts only after architecture and process docs are reviewed.
+This repository is in a docs-first and test-driven scaffold phase.
+Gradle Kotlin Multiplatform scaffold, static analysis, and cross-target unit test setup are in place.
+Production feature implementation is still milestone-driven.
 
 License: [Apache License 2.0](LICENSE)
 
@@ -44,6 +45,7 @@ Detailed architecture and design decisions live in `ARCHITECTURE.md`.
 - Fast-forward history policy
 - Mandatory quality gates per commit:
   - build
+  - ABI compatibility
   - `ktlint`
   - `detekt`
   - unit tests

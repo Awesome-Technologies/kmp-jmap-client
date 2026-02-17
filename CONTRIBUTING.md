@@ -1,11 +1,11 @@
 # Contributing
 
 Thank you for contributing.
-This project is currently in documentation-first and test-driven bootstrap mode.
+This project is currently in documentation-first and test-driven scaffold mode.
 
 ## Scope of contributions right now
 
-Until architecture review is complete, contributions should focus on:
+Until feature implementation milestones are active for a module, contributions should focus on:
 
 - documentation quality
 - CI/workflow hardening
@@ -30,6 +30,7 @@ Key rules:
 Before pushing, ensure all required checks pass:
 
 - build
+- ABI compatibility
 - `ktlint`
 - `detekt`
 - unit tests
@@ -57,7 +58,7 @@ feat(core): Add session model parsing
 
 - Parse capabilities and account map from session response
 - Preserve unknown JSON fields for extension safety
-- Validation: ./gradlew test ktlintCheck detekt
+- Validation: ./gradlew build ktlintCheck detekt test
 ```
 
 ## Pull request process

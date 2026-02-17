@@ -18,11 +18,11 @@
 ## Milestone 3: test-driven scaffold
 
 - [x] Select dependency injection framework (`Koin`) and document clean architecture boundaries
-- [ ] Initialize Gradle Kotlin Multiplatform project
-- [ ] Add `ktlint` plugin and baseline config
-- [ ] Add `detekt` plugin and baseline config
-- [ ] Add unit test setup for common/JVM/JS/iOS targets
-- [ ] Add Dokka setup for API docs generation
+- [x] Initialize Gradle Kotlin Multiplatform project
+- [x] Add `ktlint` plugin and baseline config
+- [x] Add `detekt` plugin and baseline config
+- [x] Add unit test setup for common/JVM/JS/iOS targets
+- [x] Add Dokka setup for API docs generation
 
 ## Milestone 4: TDD implementation phase
 
@@ -41,5 +41,5 @@
 
 - [ ] Add GitHub Pages workflow for Dokka publishing
 - [ ] Add branch protection using required checks
-- [ ] Add compatibility validator for library API stability
+- [x] Add compatibility validator for library API stability
 - [ ] Add release documentation and versioning policy

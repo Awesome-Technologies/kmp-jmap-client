@@ -1,0 +1,12 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, js]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <chat.amp:jmap-core>
+final object chat.amp.jmap.core/JmapCoreConstants { // chat.amp.jmap.core/JmapCoreConstants|null[0]
+    final const val CORE_CAPABILITY // chat.amp.jmap.core/JmapCoreConstants.CORE_CAPABILITY|{}CORE_CAPABILITY[0]
+        final fun <get-CORE_CAPABILITY>(): kotlin/String // chat.amp.jmap.core/JmapCoreConstants.CORE_CAPABILITY.<get-CORE_CAPABILITY>|<get-CORE_CAPABILITY>(){}[0]
+}

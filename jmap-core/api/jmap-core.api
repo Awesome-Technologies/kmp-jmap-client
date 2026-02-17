@@ -1,0 +1,4 @@
+public final class chat/amp/jmap/core/JmapCoreConstants {
+	public static final field CORE_CAPABILITY Ljava/lang/String;
+	public static final field INSTANCE Lchat/amp/jmap/core/JmapCoreConstants;
+}
