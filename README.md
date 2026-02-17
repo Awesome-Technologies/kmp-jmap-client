@@ -29,7 +29,10 @@ The planned module split is:
 - `jmap-mail`
 - `jmap-calendar`
 - `jmap-contacts`
-- `jmap-realtime` (optional)
+- `jmap-blob`
+- `jmap-filenode` (draft-gated)
+- `jmap-sharing`
+- `jmap-realtime-bindings` (optional)
 - `jmap-testing`
 
 Detailed architecture and design decisions live in `ARCHITECTURE.md`.

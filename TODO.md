@@ -17,6 +17,7 @@
 
 ## Milestone 3: test-driven scaffold
 
+- [x] Select dependency injection framework (`Koin`) and document clean architecture boundaries
 - [ ] Initialize Gradle Kotlin Multiplatform project
 - [ ] Add `ktlint` plugin and baseline config
 - [ ] Add `detekt` plugin and baseline config

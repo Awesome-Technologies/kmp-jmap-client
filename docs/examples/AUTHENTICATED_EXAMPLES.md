@@ -2,6 +2,22 @@
 
 All examples in this repository must use authenticated requests.
 
+## 0. Koin composition root (selected DI framework)
+
+```kotlin
+val jmapModule = module {
+    single<HeaderProvider> {
+        HeaderProvider {
+            mapOf(
+                "Authorization" to "Bearer ${tokenProvider.currentAccessToken()}",
+                "Accept" to "application/json"
+            )
+        }
+    }
+    single { createJmapClient(endpoint = "https://example.com/jmap/api/", headerProvider = get()) }
+}
+```
+
 ## 1. Client bootstrap with caller-owned headers
 
 ```kotlin

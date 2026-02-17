@@ -11,7 +11,7 @@ Expose typed contact and address-book APIs.
 
 ## Standards alignment
 
-- RFC 9610 (`urn:ietf:params:jmap:contacts`)
+- [RFC 9610](https://www.rfc-editor.org/rfc/rfc9610.html) (`urn:ietf:params:jmap:contacts`)
 
 ## Boundaries
 

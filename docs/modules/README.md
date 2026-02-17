@@ -7,6 +7,12 @@ This directory defines responsibilities, boundaries, and capability mapping for 
 - RFC-backed modules are treated as stable API candidates.
 - Internet-Draft-backed modules are draft-gated and must be opt-in.
 
+## Clean Architecture and DI policy
+
+- Domain and application contracts stay framework-agnostic.
+- Infrastructure adapters are wired at composition root.
+- Selected DI framework: `Koin` (module wiring in host app or dedicated composition module).
+
 ## Module index
 
 - `core.md`: Session bootstrap, envelope model, capability and push orchestration

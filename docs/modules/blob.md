@@ -11,7 +11,7 @@ Expose typed blob lifecycle operations as a stable module surface.
 
 ## Standards alignment
 
-- RFC 9404 (`urn:ietf:params:jmap:blob`)
+- [RFC 9404](https://www.rfc-editor.org/rfc/rfc9404.html) (`urn:ietf:params:jmap:blob`)
 
 ## Boundaries
 

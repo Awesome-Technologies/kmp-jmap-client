@@ -12,9 +12,9 @@ Expose typed mail APIs for RFC 8621 and selected RFC mail extensions.
 
 ## Standards alignment
 
-- RFC 8621 (`urn:ietf:params:jmap:mail`, `urn:ietf:params:jmap:submission`, `urn:ietf:params:jmap:vacationresponse`)
-- RFC 9007 (`urn:ietf:params:jmap:mdn`)
-- RFC 9219 (`urn:ietf:params:jmap:smimeverify`)
+- [RFC 8621](https://www.rfc-editor.org/rfc/rfc8621.html) (`urn:ietf:params:jmap:mail`, `urn:ietf:params:jmap:submission`, `urn:ietf:params:jmap:vacationresponse`)
+- [RFC 9007](https://www.rfc-editor.org/rfc/rfc9007.html) (`urn:ietf:params:jmap:mdn`)
+- [RFC 9219](https://www.rfc-editor.org/rfc/rfc9219.html) (`urn:ietf:params:jmap:smimeverify`)
 
 ## Boundaries
 
