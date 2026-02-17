@@ -58,7 +58,7 @@ jobs:
       - name: Triage with GitHub Copilot Models
         id: ai
         continue-on-error: true
-        uses: actions/ai-inference@v1
+        uses: actions/ai-inference@v2
         with:
           model: openai/gpt-4o-mini
           system-prompt: |
