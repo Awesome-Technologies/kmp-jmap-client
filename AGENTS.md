@@ -7,6 +7,11 @@ This document defines mandatory contribution and delivery rules for this reposit
 - `AGENTS.md` is normative for contribution process requirements.
 - Any workflow or process change that affects contribution policy must update this file in the same pull request.
 
+## Standards Prerequisite for Code and Architecture Changes
+
+- Before making any source code change or architecture change, agents must read [JMAP Standards Implementation Brief](docs/standards/JMAP_STANDARDS_IMPLEMENTATION_BRIEF.md).
+- This prerequisite applies to all implementation work and architecture documentation updates (including `ARCHITECTURE.md`).
+
 ## Branching and History Policy
 
 - Default branch is `main`.
