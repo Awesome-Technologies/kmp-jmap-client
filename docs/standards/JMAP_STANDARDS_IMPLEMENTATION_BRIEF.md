@@ -339,6 +339,36 @@ Implementation notes:
 - Calendars, EmailPush, FileNode, Metadata, RefPlus, Mail sharing
 - Keep wire compatibility gates per draft version number and capability checks.
 
+## Practical client execution profile (non-normative)
+
+The JMAP client developer guide provides practical sequencing patterns that are useful for client-side architecture and caching design, but it is not a standards source. Treat this as implementation guidance layered on top of RFC behavior.
+
+Recommended patterns to adopt:
+
+1. Cold boot mailbox view:
+   - Start with `Mailbox/get`.
+   - Use chained calls (`Email/query` with `collapseThreads`, then `Email/get` for `threadId`, `Thread/get`, and `Email/get` for display properties) to render a usable inbox in minimal round trips.
+2. Paging and query navigation:
+   - Page with repeated `Email/query` using `position`/`limit`.
+   - Avoid redundant payloads by separating ID fetch from object fetch unless the view immediately needs full objects.
+3. Thread open behavior:
+   - Fetch only the properties needed by the thread view.
+   - For raw-message workflows, fetch `blobId` and download the RFC822 object via Session `downloadUrl`.
+4. Incremental sync loop:
+   - Combine `Mailbox/changes`, `Email/queryChanges`, `Email/changes`, and `Thread/changes` in a single request where practical.
+   - Use `updatedProperties` to narrow mailbox refetches and reduce payload size.
+5. Query reconciliation discipline:
+   - Apply `Email/queryChanges` results with deterministic splice logic on local result lists.
+   - Validate `oldQueryState`/sort/filter consistency before patching cached query windows.
+6. Error fallback policy:
+   - On `tooManyChanges` or unsupported query deltas, mark cache regions dirty and rebootstrap the currently visible window with `Email/query`.
+   - Respect `canCalculateChanges`; if false, skip delta logic for that query and refresh visible slices.
+7. Action handling:
+   - Prefer optimistic local UI updates for operations such as move/set keywords, then reconcile with server delta responses.
+   - Keep mailbox counters/thread exemplars as server-truth after next sync pass.
+8. Full-local-copy mode:
+   - For clients maintaining a complete local corpus, run mailbox/email delta loops (`/changes` + targeted `/get`) and continue until current state is reached.
+
 ## Agent implementation checklist
 
 1. Parse Session and capabilities into typed feature flags.
@@ -351,6 +381,8 @@ Implementation notes:
 5. Normalize rights/sharing handling (`myRights`, `shareWith`, principal data) for re-use across modules.
 6. Keep transport abstraction clean: HTTP and WebSocket should share method execution path.
 7. Treat drafts as optional modules with strict capability/version gating.
+8. Implement a first-class query window cache model that supports sparse lists and deterministic `Email/queryChanges` splice application.
+9. Define explicit fallback paths for `tooManyChanges` and `canCalculateChanges=false` to prevent full-cache resets in common UI paths.
 
 ## Security and reliability themes across specs
 
@@ -393,3 +425,7 @@ Internet-Drafts:
 - https://datatracker.ietf.org/doc/draft-ietf-jmap-rest/
 - https://datatracker.ietf.org/doc/draft-ietf-jmap-smime-sender-extensions/
 - https://datatracker.ietf.org/doc/draft-ietf-jmap-tasks/
+
+Implementation guidance (non-normative):
+
+- https://jmap.io/client.html
