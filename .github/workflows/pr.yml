@@ -1,0 +1,105 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+      - name: Check Gradle wrapper
+        id: gradle
+        run: |
+          if [ -x ./gradlew ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build
+        if: steps.gradle.outputs.present == 'true'
+        run: ./gradlew --no-daemon build -x test
+      - name: Build skipped (bootstrap)
+        if: steps.gradle.outputs.present != 'true'
+        run: echo "No Gradle wrapper yet; build gate will enforce automatically after project scaffold exists."
+
+  ktlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+      - name: Check Gradle wrapper
+        id: gradle
+        run: |
+          if [ -x ./gradlew ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: ktlint
+        if: steps.gradle.outputs.present == 'true'
+        run: ./gradlew --no-daemon ktlintCheck
+      - name: ktlint skipped (bootstrap)
+        if: steps.gradle.outputs.present != 'true'
+        run: echo "No Gradle wrapper yet; ktlint gate will enforce automatically after project scaffold exists."
+
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+      - name: Check Gradle wrapper
+        id: gradle
+        run: |
+          if [ -x ./gradlew ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: detekt
+        if: steps.gradle.outputs.present == 'true'
+        run: ./gradlew --no-daemon detekt
+      - name: detekt skipped (bootstrap)
+        if: steps.gradle.outputs.present != 'true'
+        run: echo "No Gradle wrapper yet; detekt gate will enforce automatically after project scaffold exists."
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+      - name: Check Gradle wrapper
+        id: gradle
+        run: |
+          if [ -x ./gradlew ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Unit tests
+        if: steps.gradle.outputs.present == 'true'
+        run: ./gradlew --no-daemon test
+      - name: Unit tests skipped (bootstrap)
+        if: steps.gradle.outputs.present != 'true'
+        run: echo "No Gradle wrapper yet; unit test gate will enforce automatically after project scaffold exists."
