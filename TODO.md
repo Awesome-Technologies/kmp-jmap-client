@@ -12,8 +12,8 @@
 ## Milestone 2: architecture docs package
 
 - [x] Create extensive `ARCHITECTURE.md`
-- [ ] Create module docs under `docs/modules/`
-- [ ] Create authenticated examples documentation under `docs/examples/`
+- [x] Create module docs under `docs/modules/`
+- [x] Create authenticated examples documentation under `docs/examples/`
 
 ## Milestone 3: test-driven scaffold
 
