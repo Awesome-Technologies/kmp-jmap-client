@@ -50,6 +50,7 @@ See `AGENTS.md` and `CONTRIBUTING.md` for full contribution policy.
 ## CI and GitHub operations
 
 - PR validation workflow with required checks
+- PR triage and labeling by GitHub Copilot workflow
 - PR review by GitHub Copilot
 - Release-confidence workflow on every push to `main`
 - Regular security audits (CodeQL, Dependabot, Code Scanning, Secret Scanning)

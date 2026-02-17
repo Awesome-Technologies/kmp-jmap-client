@@ -1,0 +1,251 @@
+name: Copilot PR Triage
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+    branches: [main]
+
+permissions:
+  contents: read
+  models: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: copilot-pr-triage-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  triage:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build PR context
+        id: context
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+
+            const payload = {
+              number: pr.number,
+              title: pr.title,
+              body: pr.body || "",
+              draft: pr.draft,
+              labels: (pr.labels || []).map((l) => l.name),
+              changed_files: files.map((f) => ({
+                filename: f.filename,
+                status: f.status,
+                additions: f.additions,
+                deletions: f.deletions,
+              })),
+            };
+
+            core.setOutput("payload", JSON.stringify(payload));
+
+      - name: Write PR context file
+        env:
+          PR_PAYLOAD: ${{ steps.context.outputs.payload }}
+        run: |
+          printf '%s' "$PR_PAYLOAD" > pr-context.json
+
+      - name: Triage with GitHub Copilot Models
+        id: ai
+        continue-on-error: true
+        uses: actions/ai-inference@v1
+        with:
+          model: openai/gpt-4o-mini
+          system-prompt: |
+            You are a pull-request triage assistant.
+            Classify the PR strictly from provided metadata and changed files.
+            Do not invent files, code, or behavior.
+            Return JSON only.
+          prompt: |
+            Analyze this pull request and return ONLY valid JSON in this shape:
+            {
+              "labels": ["..."],
+              "triage_summary": "...",
+              "confidence": "low|medium|high"
+            }
+
+            Rules:
+            - Choose 2 to 5 labels.
+            - Use ONLY these allowed labels:
+              type:documentation, type:workflow, type:bug, type:feature, type:refactor, type:chore,
+              area:core, area:mail, area:calendar, area:contacts, area:realtime, area:testing, area:docs, area:ci,
+              priority:low, priority:medium, priority:high,
+              needs:tests, needs:discussion, needs:breaking-change, needs:dependencies
+            - Keep labels evidence-based from title/body/files.
+            - For docs-only changes include type:documentation and area:docs.
+            - For workflow/CI changes include type:workflow and area:ci.
+            - triage_summary must be max 4 sentences and mention changed areas.
+
+            PR metadata and files:
+            {{pr_context}}
+          file_input: |
+            pr_context: pr-context.json
+
+      - name: Parse triage result
+        id: parsed
+        env:
+          RAW: ${{ steps.ai.outputs.response }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          raw="$RAW"
+          json="$raw"
+
+          if ! echo "$json" | jq -e . >/dev/null 2>&1; then
+            candidate=$(printf '%s\n' "$raw" | sed -n '/```json/,/```/p' | sed '1d;$d')
+            if [ -n "$candidate" ] && echo "$candidate" | jq -e . >/dev/null 2>&1; then
+              json="$candidate"
+            fi
+          fi
+
+          if ! echo "$json" | jq -e . >/dev/null 2>&1; then
+            json='{"labels":["type:chore","area:ci","priority:low"],"triage_summary":"Could not parse model output. Applied safe default triage labels.","confidence":"low"}'
+          fi
+
+          labels_csv=$(echo "$json" | jq -r '.labels // [] | map(select(type == "string")) | unique | join(",")')
+          summary=$(echo "$json" | jq -r '.triage_summary // "No summary generated."')
+          confidence=$(echo "$json" | jq -r '.confidence // "low"')
+
+          {
+            echo "labels_csv=$labels_csv"
+            echo "confidence=$confidence"
+            echo 'summary<<EOF'
+            echo "$summary"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ensure triage labels exist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const desired = {
+              "type:documentation": { color: "0e8a16", description: "Documentation-only changes" },
+              "type:workflow": { color: "5319e7", description: "CI/CD or workflow changes" },
+              "type:bug": { color: "d73a4a", description: "Bug fix" },
+              "type:feature": { color: "a2eeef", description: "New functionality" },
+              "type:refactor": { color: "cfd3d7", description: "Internal restructuring" },
+              "type:chore": { color: "ededed", description: "Maintenance task" },
+              "area:core": { color: "1d76db", description: "Core JMAP module" },
+              "area:mail": { color: "1d76db", description: "Mail module" },
+              "area:calendar": { color: "1d76db", description: "Calendar module" },
+              "area:contacts": { color: "1d76db", description: "Contacts module" },
+              "area:realtime": { color: "1d76db", description: "Realtime module" },
+              "area:testing": { color: "1d76db", description: "Testing infrastructure" },
+              "area:docs": { color: "1d76db", description: "Documentation" },
+              "area:ci": { color: "1d76db", description: "CI and workflow configuration" },
+              "priority:low": { color: "0e8a16", description: "Low priority" },
+              "priority:medium": { color: "fbca04", description: "Medium priority" },
+              "priority:high": { color: "d73a4a", description: "High priority" },
+              "needs:tests": { color: "f9d0c4", description: "Needs additional tests" },
+              "needs:discussion": { color: "fef2c0", description: "Needs product/technical discussion" },
+              "needs:breaking-change": { color: "b60205", description: "Potential breaking change" },
+              "needs:dependencies": { color: "0366d6", description: "Dependency-related updates" },
+            };
+
+            const existing = await github.paginate(github.rest.issues.listLabelsForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            });
+            const names = new Set(existing.map((l) => l.name));
+
+            for (const [name, cfg] of Object.entries(desired)) {
+              if (!names.has(name)) {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name,
+                  color: cfg.color,
+                  description: cfg.description,
+                });
+              }
+            }
+
+      - name: Apply managed triage labels
+        uses: actions/github-script@v7
+        env:
+          RECOMMENDED_LABELS: ${{ steps.parsed.outputs.labels_csv }}
+          TRIAGE_SUMMARY: ${{ steps.parsed.outputs.summary }}
+          TRIAGE_CONFIDENCE: ${{ steps.parsed.outputs.confidence }}
+        with:
+          script: |
+            const managed = new Set([
+              "type:documentation", "type:workflow", "type:bug", "type:feature", "type:refactor", "type:chore",
+              "area:core", "area:mail", "area:calendar", "area:contacts", "area:realtime", "area:testing", "area:docs", "area:ci",
+              "priority:low", "priority:medium", "priority:high",
+              "needs:tests", "needs:discussion", "needs:breaking-change", "needs:dependencies",
+            ]);
+
+            const wanted = (process.env.RECOMMENDED_LABELS || "")
+              .split(",")
+              .map((s) => s.trim())
+              .filter((s) => s.length > 0)
+              .filter((s) => managed.has(s));
+
+            const issue_number = context.issue.number;
+
+            const currentIssue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+            });
+
+            const current = (currentIssue.data.labels || []).map((l) => (typeof l === "string" ? l : l.name));
+            const toRemove = current.filter((name) => managed.has(name) && !wanted.includes(name));
+            const toAdd = wanted.filter((name) => !current.includes(name));
+
+            for (const name of toRemove) {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                name,
+              });
+            }
+
+            if (toAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                labels: toAdd,
+              });
+            }
+
+            const marker = "<!-- copilot-triage-comment -->";
+            const body = `${marker}\n## Copilot PR triage\n\n- Confidence: ${process.env.TRIAGE_CONFIDENCE || "low"}\n- Applied labels: ${wanted.length > 0 ? wanted.map((l) => `\`${l}\``).join(", ") : "none"}\n\n${process.env.TRIAGE_SUMMARY || "No summary generated."}`;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            const existing = comments.find((c) => c.user?.login === "github-actions[bot]" && c.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                body,
+              });
+            }

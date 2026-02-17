@@ -75,8 +75,9 @@ feat(core): Add session model parsing
 1. Confirm PR scope is clear and matches the changed files.
 2. Confirm commit history quality (small-step, understandable, bisect-safe).
 3. Confirm required CI checks are green (`build`, `ktlint`, `detekt`, `unit-tests`).
-4. Confirm documentation updates are present when required (top-level and affected module-level markdown).
-5. Merge using fast-forward compatible strategy only.
+4. Confirm Copilot triage labels and summary are reasonable; adjust labels if needed.
+5. Confirm documentation updates are present when required (top-level and affected module-level markdown).
+6. Merge using fast-forward compatible strategy only.
 
 ## Style and best practices
 
