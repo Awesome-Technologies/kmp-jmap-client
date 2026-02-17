@@ -11,7 +11,7 @@
 
 ## Milestone 2: architecture docs package
 
-- [ ] Create extensive `ARCHITECTURE.md`
+- [x] Create extensive `ARCHITECTURE.md`
 - [ ] Create module docs under `docs/modules/`
 - [ ] Create authenticated examples documentation under `docs/examples/`
 
