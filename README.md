@@ -1,5 +1,9 @@
 # JMAP Kotlin Multiplatform
 
+[![PR Checks](https://github.com/Awesome-Technologies/kmp-jmap-client/actions/workflows/pr.yml/badge.svg)](https://github.com/Awesome-Technologies/kmp-jmap-client/actions/workflows/pr.yml)
+[![Release Test](https://github.com/Awesome-Technologies/kmp-jmap-client/actions/workflows/release-test.yml/badge.svg)](https://github.com/Awesome-Technologies/kmp-jmap-client/actions/workflows/release-test.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
 Kotlin Multiplatform library for the JMAP protocol with typed APIs for Core, Mail, Calendar, and Contacts, plus a raw escape hatch for unsupported extensions.
 
 ## Current status
