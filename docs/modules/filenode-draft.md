@@ -11,7 +11,7 @@ Provide typed file hierarchy APIs while FileNode remains a draft.
 
 ## Standards alignment
 
-- draft-ietf-jmap-filenode (`urn:ietf:params:jmap:filenode`)
+- [draft-ietf-jmap-filenode](https://datatracker.ietf.org/doc/draft-ietf-jmap-filenode/) (`urn:ietf:params:jmap:filenode`)
 
 ## Draft policy
 

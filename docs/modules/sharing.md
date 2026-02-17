@@ -12,7 +12,7 @@ Provide sharing and principal abstractions reusable across domains.
 
 ## Standards alignment
 
-- RFC 9670 (`urn:ietf:params:jmap:principals`, `urn:ietf:params:jmap:principals:owner`)
+- [RFC 9670](https://www.rfc-editor.org/rfc/rfc9670.html) (`urn:ietf:params:jmap:principals`, `urn:ietf:params:jmap:principals:owner`)
 
 ## Boundaries
 

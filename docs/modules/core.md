@@ -15,11 +15,17 @@ Provide protocol and orchestration primitives used by all typed modules.
 
 ## Standards alignment
 
-- RFC 8620 (`urn:ietf:params:jmap:core`)
-- RFC 9749 integration touchpoints for webpush VAPID key handling
+- [RFC 8620](https://www.rfc-editor.org/rfc/rfc8620.html) (`urn:ietf:params:jmap:core`)
+- [RFC 9749](https://www.rfc-editor.org/rfc/rfc9749.html) integration touchpoints for webpush VAPID key handling (`urn:ietf:params:jmap:webpush-vapid`)
 
 ## Boundaries
 
 - Must not depend on domain modules
 - Must not depend on concrete storage frameworks
 - Must keep transport implementation behind abstractions
+- Must remain DI-framework agnostic (no direct Koin dependency in pure core policy types)
+
+## Composition and DI
+
+- `jmap-core` exposes ports and constructor-injectable services.
+- `Koin` modules bind interface contracts to infrastructure implementations at composition root.

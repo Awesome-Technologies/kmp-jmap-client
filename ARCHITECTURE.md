@@ -11,6 +11,7 @@
 ### Goals
 
 - Build a Kotlin Multiplatform JMAP library for `JVM`, `Android`, `iOS`, and `JS`.
+- Apply Clean Architecture boundaries so protocol/domain policies remain independent from platform and infrastructure details.
 - Provide a typed-first API for stable standards (`Core`, `Mail`, `Contacts`) and draft-gated APIs for evolving standards (for example `Calendar`, `FileNode`).
 - Provide a raw escape hatch for unknown or vendor-specific methods.
 - Preserve unknown JSON fields to remain forward compatible with extensions.
@@ -41,10 +42,29 @@
 
 ## Layered model
 
-1. Public API layer
-2. Protocol/codec layer
-3. Transport abstraction layer
-4. Platform engine layer
+1. Domain layer (entities and protocol policies)
+2. Application layer (use cases and orchestration)
+3. Interface adapter layer (typed client facades and mapping)
+4. Infrastructure layer (transport, serialization, storage adapters)
+5. Platform engine layer
+
+## Clean Architecture dependency rule
+
+- Source dependencies must point inward only.
+- Domain and application layers must not import infrastructure or platform engine code.
+- Interface adapters may depend on domain/application contracts but not on platform-specific engines.
+- Infrastructure implements domain/application ports and is wired at composition root.
+
+## Dependency injection framework selection
+
+- Selected framework: `Koin` for Kotlin Multiplatform dependency injection.
+- Rationale:
+  - Works in shared/common code and platform-specific source sets.
+  - Supports constructor-based wiring and explicit module definitions.
+  - Keeps runtime integration lightweight without requiring annotation processors in all targets.
+- Constraint:
+  - `jmap-core` and domain modules expose constructor-injectable components and interfaces only.
+  - Koin module assembly is done at composition roots (`jmap-composition` or host app), not inside pure domain logic.
 
 ```mermaid
 flowchart TD
@@ -95,19 +115,19 @@ block
 
 | Standard | Capability | Planned module | Maturity | Notes |
 | --- | --- | --- | --- | --- |
-| RFC 8620 (Core) | `urn:ietf:params:jmap:core` | `jmap-core` | Stable RFC | Foundation for session, envelope semantics, push subscription objects |
-| RFC 8621 (Mail) | `urn:ietf:params:jmap:mail` | `jmap-mail` | Stable RFC | Primary domain scope for v1 |
-| RFC 9610 (Contacts) | `urn:ietf:params:jmap:contacts` | `jmap-contacts` | Stable RFC | In v1 typed domain scope |
-| RFC 9404 (Blob) | `urn:ietf:params:jmap:blob` | `jmap-blob` | Stable RFC | Keep distinct from FileNode draft surface |
-| RFC 9670 (Sharing) | `urn:ietf:params:jmap:principals` | `jmap-sharing` | Stable RFC | Cross-domain sharing substrate |
-| RFC 8887 (WebSocket) | `urn:ietf:params:jmap:websocket` | `jmap-realtime-bindings` | Stable RFC | Optional transport binding, not core requirement |
-| RFC 9749 (Web Push VAPID) | `urn:ietf:params:jmap:webpush-vapid` | `jmap-core` + bindings | Stable RFC | Key rotation and push registration behavior |
-| RFC 9425 (Quota) | `urn:ietf:params:jmap:quota` | `jmap-core` extension surface | Stable RFC | Typed extension planned after baseline |
-| RFC 9661 (Sieve) | `urn:ietf:params:jmap:sieve` | future `jmap-sieve` | Stable RFC | Planned post-baseline typed module |
-| RFC 9007 (MDN) | `urn:ietf:params:jmap:mdn` | `jmap-mail` extension surface | Stable RFC | Mail-adjacent extension |
-| RFC 9219 (S/MIME verify) | `urn:ietf:params:jmap:smimeverify` | `jmap-mail` extension surface | Stable RFC | Mail query/get property extension |
-| draft-ietf-jmap-calendars | `urn:ietf:params:jmap:calendars` | `jmap-calendar` | Internet-Draft | Feature-flagged, version-pinned, no stability guarantee |
-| draft-ietf-jmap-filenode | `urn:ietf:params:jmap:filenode` | `jmap-filenode` | Internet-Draft | Feature-flagged, version-pinned, no stability guarantee |
+| [RFC 8620 (Core)](https://www.rfc-editor.org/rfc/rfc8620.html) | `urn:ietf:params:jmap:core` | `jmap-core` | Stable RFC | Foundation for session, envelope semantics, push subscription objects |
+| [RFC 8621 (Mail)](https://www.rfc-editor.org/rfc/rfc8621.html) | `urn:ietf:params:jmap:mail` | `jmap-mail` | Stable RFC | Primary domain scope for v1 |
+| [RFC 9610 (Contacts)](https://www.rfc-editor.org/rfc/rfc9610.html) | `urn:ietf:params:jmap:contacts` | `jmap-contacts` | Stable RFC | In v1 typed domain scope |
+| [RFC 9404 (Blob)](https://www.rfc-editor.org/rfc/rfc9404.html) | `urn:ietf:params:jmap:blob` | `jmap-blob` | Stable RFC | Keep distinct from FileNode draft surface |
+| [RFC 9670 (Sharing)](https://www.rfc-editor.org/rfc/rfc9670.html) | `urn:ietf:params:jmap:principals` | `jmap-sharing` | Stable RFC | Cross-domain sharing substrate |
+| [RFC 8887 (WebSocket)](https://www.rfc-editor.org/rfc/rfc8887.html) | `urn:ietf:params:jmap:websocket` | `jmap-realtime-bindings` | Stable RFC | Optional transport binding, not core requirement |
+| [RFC 9749 (Web Push VAPID)](https://www.rfc-editor.org/rfc/rfc9749.html) | `urn:ietf:params:jmap:webpush-vapid` | `jmap-core` + bindings | Stable RFC | Key rotation and push registration behavior |
+| [RFC 9425 (Quota)](https://www.rfc-editor.org/rfc/rfc9425.html) | `urn:ietf:params:jmap:quota` | `jmap-core` extension surface | Stable RFC | Typed extension planned after baseline |
+| [RFC 9661 (Sieve)](https://www.rfc-editor.org/rfc/rfc9661.html) | `urn:ietf:params:jmap:sieve` | future `jmap-sieve` | Stable RFC | Planned post-baseline typed module |
+| [RFC 9007 (MDN)](https://www.rfc-editor.org/rfc/rfc9007.html) | `urn:ietf:params:jmap:mdn` | `jmap-mail` extension surface | Stable RFC | Mail-adjacent extension |
+| [RFC 9219 (S/MIME verify)](https://www.rfc-editor.org/rfc/rfc9219.html) | `urn:ietf:params:jmap:smimeverify` | `jmap-mail` extension surface | Stable RFC | Mail query/get property extension |
+| [draft-ietf-jmap-calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) | `urn:ietf:params:jmap:calendars` | `jmap-calendar` | Internet-Draft | Feature-flagged, version-pinned, no stability guarantee |
+| [draft-ietf-jmap-filenode](https://datatracker.ietf.org/doc/draft-ietf-jmap-filenode/) | `urn:ietf:params:jmap:filenode` | `jmap-filenode` | Internet-Draft | Feature-flagged, version-pinned, no stability guarantee |
 
 ## Persistence boundary (application-injected)
 
@@ -221,6 +241,12 @@ sequenceDiagram
 ## 4) Public API contract
 
 The following contracts are architecture-level requirements.
+
+Clean Architecture contract boundaries:
+
+- Domain and application services expose constructor-only dependencies on ports/interfaces.
+- Infrastructure implementations are bound at composition root via DI modules.
+- Public typed clients are interface adapters over application use cases.
 
 ```kotlin
 interface JmapClient {
@@ -403,11 +429,18 @@ interface EntityStore<T : Any, Id : Any> {
 - Rationale: Preserve correctness and avoid accidental stable guarantees for evolving wire contracts.
 - Consequence: Draft modules require explicit opt-in and may change on draft revision updates.
 
+### ADR-009 Koin as DI framework
+
+- Decision: Use `Koin` as the dependency injection framework for runtime wiring across KMP targets.
+- Rationale: Koin is Kotlin-native, multiplatform-capable, and keeps composition explicit through module DSL without forcing platform-wide annotation processing.
+- Consequence: DI module definitions live in composition roots; core domain/application contracts stay framework-agnostic and testable with manual wiring.
+
 ## 9) Review checklist for this document
 
 - Does this architecture match `README.md` goals and scope?
 - Are public API boundaries explicit and testable?
 - Are module boundaries implementation-ready?
 - Does the standards alignment table correctly map each feature to RFC-stable vs draft-gated scope?
+- Is DI wiring confined to composition roots with domain/application layers remaining Koin-free?
 - Are cross-platform constraints clear enough for scaffold and tests?
 - Are ADR consequences concrete enough to guide coding decisions?

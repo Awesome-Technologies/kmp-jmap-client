@@ -12,7 +12,7 @@ Provide optional transport bindings for event delivery and low-latency updates.
 
 ## Standards alignment
 
-- RFC 8887 (`urn:ietf:params:jmap:websocket`)
+- [RFC 8887](https://www.rfc-editor.org/rfc/rfc8887.html) (`urn:ietf:params:jmap:websocket`)
 
 ## Boundaries
 

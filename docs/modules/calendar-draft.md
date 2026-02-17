@@ -11,9 +11,16 @@ Provide typed calendar APIs while the calendar standard remains an Internet-Draf
 - Capability-gated dispatch for calendar draft capabilities
 - Version-pinned wire-contract handling
 
+## Type models
+
+- `Calendar`
+- `CalendarEvent`
+- `CalendarEventParticipation`
+- `CalendarEventNotification`
+
 ## Standards alignment
 
-- draft-ietf-jmap-calendars (`urn:ietf:params:jmap:calendars`)
+- [draft-ietf-jmap-calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) (`urn:ietf:params:jmap:calendars`)
 
 ## Draft policy
 
