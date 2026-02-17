@@ -75,7 +75,7 @@ jobs:
             }
 
             Rules:
-            - Choose 2 to 5 labels.
+            - Choose 1 to 3 labels.
             - Use ONLY these allowed labels:
               type:documentation, type:workflow, type:bug, type:feature, type:refactor, type:chore,
               area:core, area:mail, area:calendar, area:contacts, area:realtime, area:testing, area:docs, area:ci,
@@ -125,12 +125,29 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
+      - name: Derive path-based labels
+        id: path_labels
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          labels=()
+          if jq -e '.changed_files | any(.filename; test("\\.(md|markdown)$"; "i"))' pr-context.json >/dev/null; then
+            labels+=("type:documentation")
+          fi
+          if jq -e '.changed_files | any(.filename; test("^\\.github/workflows/.+\\.(yml|yaml)$"; "i"))' pr-context.json >/dev/null; then
+            labels+=("type:workflow")
+          fi
+
+          labels_csv=$(printf '%s\n' "${labels[@]-}" | sed '/^$/d' | sort -u | paste -sd, -)
+          echo "labels_csv=$labels_csv" >> "$GITHUB_OUTPUT"
+
       - name: Ensure triage labels exist
         uses: actions/github-script@v7
         with:
           script: |
             const desired = {
-              "type:documentation": { color: "0e8a16", description: "Documentation-only changes" },
+              "type:documentation": { color: "0e8a16", description: "Documentation changes" },
               "type:workflow": { color: "5319e7", description: "CI/CD or workflow changes" },
               "type:bug": { color: "d73a4a", description: "Bug fix" },
               "type:feature": { color: "a2eeef", description: "New functionality" },
@@ -175,7 +192,7 @@ jobs:
       - name: Apply managed triage labels
         uses: actions/github-script@v7
         env:
-          RECOMMENDED_LABELS: ${{ steps.parsed.outputs.labels_csv }}
+          RECOMMENDED_LABELS: ${{ steps.parsed.outputs.labels_csv }},${{ steps.path_labels.outputs.labels_csv }}
           TRIAGE_SUMMARY: ${{ steps.parsed.outputs.summary }}
           TRIAGE_CONFIDENCE: ${{ steps.parsed.outputs.confidence }}
         with:
