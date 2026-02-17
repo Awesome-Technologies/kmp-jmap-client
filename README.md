@@ -80,6 +80,25 @@ Status badges are sourced from IETF Datatracker (`doc.json` `std_level`) so they
 | [RFC 9670](https://www.rfc-editor.org/rfc/rfc9670.html) | JSON Meta Application Protocol (JMAP) Sharing | ![RFC 9670 status][rfc9670-status] |
 | [RFC 9749](https://www.rfc-editor.org/rfc/rfc9749.html) | Use of Voluntary Application Server Identification (VAPID) in JSON Meta Application Protocol (JMAP) Web Push | ![RFC 9749 status][rfc9749-status] |
 
+## JMAP Internet-Drafts
+
+Comprehensive list of JMAP Working Group Internet-Drafts from the [IETF Datatracker JMAP document index](https://datatracker.ietf.org/group/jmap/documents/) (active, active with IESG, and expired, checked on February 17, 2026).
+Status badges are sourced from IETF Datatracker (`doc.json` `state`) so they auto-refresh from upstream metadata.
+
+| Draft | Title | Status |
+| --- | --- | --- |
+| [draft-ietf-jmap-calendars](https://datatracker.ietf.org/doc/draft-ietf-jmap-calendars/) | JSON Meta Application Protocol (JMAP) for Calendars | ![draft-ietf-jmap-calendars status][draft-ietf-jmap-calendars-status] |
+| [draft-ietf-jmap-emailpush](https://datatracker.ietf.org/doc/draft-ietf-jmap-emailpush/) | JSON Meta Application Protocol (JMAP) Email Delivery Push Notifications | ![draft-ietf-jmap-emailpush status][draft-ietf-jmap-emailpush-status] |
+| [draft-ietf-jmap-essential](https://datatracker.ietf.org/doc/draft-ietf-jmap-essential/) | JMAP Essential Profile | ![draft-ietf-jmap-essential status][draft-ietf-jmap-essential-status] |
+| [draft-ietf-jmap-filenode](https://datatracker.ietf.org/doc/draft-ietf-jmap-filenode/) | JMAP File Storage extension | ![draft-ietf-jmap-filenode status][draft-ietf-jmap-filenode-status] |
+| [draft-ietf-jmap-mail-sharing](https://datatracker.ietf.org/doc/draft-ietf-jmap-mail-sharing/) | JMAP Mail Sharing | ![draft-ietf-jmap-mail-sharing status][draft-ietf-jmap-mail-sharing-status] |
+| [draft-ietf-jmap-metadata](https://datatracker.ietf.org/doc/draft-ietf-jmap-metadata/) | JMAP Object Metadata | ![draft-ietf-jmap-metadata status][draft-ietf-jmap-metadata-status] |
+| [draft-ietf-jmap-portability-extensions](https://datatracker.ietf.org/doc/draft-ietf-jmap-portability-extensions/) | JMAP Migration and Portability Extensions | ![draft-ietf-jmap-portability-extensions status][draft-ietf-jmap-portability-extensions-status] |
+| [draft-ietf-jmap-refplus](https://datatracker.ietf.org/doc/draft-ietf-jmap-refplus/) | JMAP Enhanced Result References | ![draft-ietf-jmap-refplus status][draft-ietf-jmap-refplus-status] |
+| [draft-ietf-jmap-rest](https://datatracker.ietf.org/doc/draft-ietf-jmap-rest/) | JMAP REST Mapping | ![draft-ietf-jmap-rest status][draft-ietf-jmap-rest-status] |
+| [draft-ietf-jmap-smime-sender-extensions](https://datatracker.ietf.org/doc/draft-ietf-jmap-smime-sender-extensions/) | JMAP extension for S/MIME signing and encryption | ![draft-ietf-jmap-smime-sender-extensions status][draft-ietf-jmap-smime-sender-extensions-status] |
+| [draft-ietf-jmap-tasks](https://datatracker.ietf.org/doc/draft-ietf-jmap-tasks/) | JMAP for Tasks | ![draft-ietf-jmap-tasks status][draft-ietf-jmap-tasks-status] |
+
 [rfc8620-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Frfc8620%2Fdoc.json&query=%24.std_level&label=status&cacheSeconds=86400
 [rfc8621-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Frfc8621%2Fdoc.json&query=%24.std_level&label=status&cacheSeconds=86400
 [rfc8887-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Frfc8887%2Fdoc.json&query=%24.std_level&label=status&cacheSeconds=86400
@@ -91,3 +110,14 @@ Status badges are sourced from IETF Datatracker (`doc.json` `std_level`) so they
 [rfc9661-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Frfc9661%2Fdoc.json&query=%24.std_level&label=status&cacheSeconds=86400
 [rfc9670-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Frfc9670%2Fdoc.json&query=%24.std_level&label=status&cacheSeconds=86400
 [rfc9749-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Frfc9749%2Fdoc.json&query=%24.std_level&label=status&cacheSeconds=86400
+[draft-ietf-jmap-calendars-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-calendars%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-emailpush-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-emailpush%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-essential-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-essential%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-filenode-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-filenode%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-mail-sharing-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-mail-sharing%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-metadata-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-metadata%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-portability-extensions-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-portability-extensions%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-refplus-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-refplus%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-rest-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-rest%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-smime-sender-extensions-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-smime-sender-extensions%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
+[draft-ietf-jmap-tasks-status]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdatatracker.ietf.org%2Fdoc%2Fdraft-ietf-jmap-tasks%2Fdoc.json&query=%24.state&label=status&cacheSeconds=86400
